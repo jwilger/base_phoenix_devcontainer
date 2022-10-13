@@ -34,9 +34,7 @@ defmodule BasicPhxApp.MixProject do
   defp deps do
     [
       {:better_params, "~> 0.5"},
-      {:bulma, "~> 0.9"},
       {:credo, "~> 1.6", runtime: false, only: [:dev, :test]},
-      {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
       {:dialyxir, "~> 1.2", runtime: false, only: [:dev, :test]},
       {:ecto_sql, "~> 3.6"},
       {:elixir_auth_google, "~> 1.6"},
@@ -56,6 +54,7 @@ defmodule BasicPhxApp.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:sobelow, "~> 0.11", runtime: false, only: [:dev, :test]},
       {:swoosh, "~> 1.3"},
+      {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:typed_ecto_schema, "~> 0.4"},
@@ -84,7 +83,7 @@ defmodule BasicPhxApp.MixProject do
         "test"
       ],
       "assets.deploy": [
-        "sass default --no-source-map --style=compresses",
+        "tailwind default --minify",
         "esbuild default --minify",
         "phx.digest"
       ],
@@ -93,7 +92,7 @@ defmodule BasicPhxApp.MixProject do
         "compile --warnings-as-errors",
         "test --warnings-as-errors",
         "credo --strict",
-        "sobelow -i Config.CSP,Config.HTTPS --exit",
+        "sobelow -i Config.CSP --exit",
         "dialyzer --list-unused-filters"
       ]
     ]

@@ -12,13 +12,6 @@ config :basic_phx_app, BasicPhxApp.Mailer, adapter: Swoosh.Adapters.Local
 
 config :swoosh, :api_client, false
 
-config :dart_sass,
-  version: "1.55.0",
-  default: [
-    args: ~w(--load-path=../deps/bulma css:../priv/static/assets),
-    cd: Path.expand("../assets", __DIR__)
-  ]
-
 config :esbuild,
   version: "0.14.29",
   default: [
@@ -33,6 +26,17 @@ config :logger, :console,
   metadata: [:request_id]
 
 config :phoenix, :json_library, Jason
+
+config :tailwind,
+  version: "3.1.8",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=css/app.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../assets", __DIR__)
+  ]
 
 case config_env() do
   :prod ->
@@ -54,9 +58,7 @@ case config_env() do
       secret_key_base: "NYZcxIOUaUHcuLkDxyPrY7ti2InEHpA32riXr3K0CXOCTiQP5J0l82oWSYaLVhJu",
       watchers: [
         esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
-        sass:
-          {DartSass, :install_and_run,
-           [:default, ~w(--embed-source-map --source-map-urls=absolute --watch)]}
+        tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
       ],
       live_reload: [
         patterns: [
