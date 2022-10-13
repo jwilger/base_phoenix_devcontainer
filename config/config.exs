@@ -1,35 +1,24 @@
-# This file is responsible for configuring your application
-# and its dependencies with the aid of the Config module.
-#
-# This configuration file is loaded before any dependency and
-# is restricted to this project.
-
-# General application configuration
 import Config
 
-config :basic_phx_app,
-  ecto_repos: [BasicPhxApp.Repo]
+config :basic_phx_app, ecto_repos: [BasicPhxApp.Repo]
 
-# Configures the endpoint
 config :basic_phx_app, BasicPhxAppWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: BasicPhxAppWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: BasicPhxApp.PubSub,
-  live_view: [signing_salt: "Uy5WGYxt"]
+  live_view: [signing_salt: "BiLoaGaG"]
 
-# Configures the mailer
-#
-# By default it uses the "Local" adapter which stores the emails
-# locally. You can see the emails in your browser, at "/dev/mailbox".
-#
-# For production it's recommended to configure a different adapter
-# at the `config/runtime.exs`.
 config :basic_phx_app, BasicPhxApp.Mailer, adapter: Swoosh.Adapters.Local
 
-# Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 
-# Configure esbuild (the version is required)
+config :dart_sass,
+  version: "1.55.0",
+  default: [
+    args: ~w(--load-path=../deps/bulma css:../priv/static/assets),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
 config :esbuild,
   version: "0.14.29",
   default: [
@@ -39,14 +28,62 @@ config :esbuild,
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
-# Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-# Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
-import_config "#{config_env()}.exs"
+case config_env() do
+  :prod ->
+    config :basic_phx_app, BasicPhxAppWeb.Endpoint,
+      cache_static_manifest: "priv/static/cache_manifest.json"
+
+    config :logger, level: :info
+
+  :dev ->
+    config :basic_phx_app, BasicPhxApp.Repo,
+      stacktrace: true,
+      show_sensitive_data_on_connection_error: true
+
+    config :basic_phx_app, BasicPhxAppWeb.Endpoint,
+      http: [ip: {127, 0, 0, 1}, port: 4000],
+      check_origin: false,
+      code_reloader: true,
+      debug_errors: true,
+      secret_key_base: "NYZcxIOUaUHcuLkDxyPrY7ti2InEHpA32riXr3K0CXOCTiQP5J0l82oWSYaLVhJu",
+      watchers: [
+        esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+        sass:
+          {DartSass, :install_and_run,
+           [:default, ~w(--embed-source-map --source-map-urls=absolute --watch)]}
+      ],
+      live_reload: [
+        patterns: [
+          ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+          ~r"priv/gettext/.*(po)$",
+          ~r"lib/basic_phx_app_web/(live|views)/.*(ex)$",
+          ~r"lib/basic_phx_app_web/templates/.*(eex)$"
+        ]
+      ]
+
+    config :logger, :console, format: "[$level] $message\n"
+
+    config :phoenix, :stacktrace_depth, 20
+
+    config :phoenix, :plug_init_mode, :runtime
+
+  :test ->
+    config :basic_phx_app, BasicPhxAppWeb.Endpoint,
+      http: [ip: {127, 0, 0, 1}, port: 4002],
+      secret_key_base: "TnKiBnvKiZF7an2UoXNvG+yfyPXo8zvd0ryI2rqPGPs58Z3JWCwmw3DqzvexIzvZ",
+      server: false
+
+    config :basic_phx_app, BasicPhxApp.Repo, pool: Ecto.Adapters.SQL.Sandbox
+
+    config :basic_phx_app, BasicPhxApp.Mailer, adapter: Swoosh.Adapters.Test
+
+    config :logger, level: :warn
+
+    config :phoenix, :plug_init_mode, :runtime
+end
