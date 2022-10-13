@@ -32,3 +32,5 @@ basic_phx_app-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Ignore Certain IDE settings files
+/.vscode/settings.json
