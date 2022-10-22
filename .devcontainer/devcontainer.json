@@ -19,7 +19,8 @@
 				"eamodio.gitlens",
 				"benvp.vscode-hex-pm-intellisense",
 				"ms-vsliveshare.vsliveshare-pack",
-				"pantajoe.vscode-elixir-credo"
+				"pantajoe.vscode-elixir-credo",
+				"bradlc.vscode-tailwindcss"
 			],
 			"settings": {
 				"triggerTaskOnSave.tasks": {
