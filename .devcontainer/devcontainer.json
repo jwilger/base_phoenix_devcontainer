@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/elixir-phoenix-postgres
 {
-	"name": "Multivac",
+	"name": "BasicPhxApp",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "elixir",
 	"workspaceFolder": "/workspace",
@@ -40,7 +40,7 @@
 		5432
 	],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "mix deps.get"
+	"postCreateCommand": "mix deps.get",
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }
