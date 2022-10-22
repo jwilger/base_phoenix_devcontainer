@@ -10,8 +10,8 @@ then
   mv lib/basic_phx_app.ex lib/${app}.ex
   mv lib/basic_phx_app_web.ex lib/${app}_web.ex
   mv test/basic_phx_app_web test/${app}_web
-  find ./{assets,config,lib,mix.exs,mix.lock,priv,test} -type f | xargs -n 1 sed -i "s/BasicPhxApp/${module}/g"
-  find ./{assets,config,lib,mix.exs,mix.lock,priv,test} -type f | xargs -n 1 sed -i "s/basic_phx_app/${app}/g"
+  find ./{.devcontainer,assets,config,lib,mix.exs,mix.lock,priv,test} -type f | xargs -n 1 sed -i "s/BasicPhxApp/${module}/g"
+  find ./{.devcontainer,assets,config,lib,mix.exs,mix.lock,priv,test} -type f | xargs -n 1 sed -i "s/basic_phx_app/${app}/g"
   mix deps.get
   mix format
   mkdir -p .git/hooks
